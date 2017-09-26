@@ -14,16 +14,18 @@ model = W * x + b
 squared_deltas = tf.square(model - y)
 loss = tf.reduce_sum(squared_deltas)
 
-# fix W and b
-fixW = tf.assign(W, [-1.])
-fixb = tf.assign(b, [1.])
+# define training
+optimizer = tf.train.GradientDescentOptimizer(0.01)
+train = optimizer.minimize(loss)
 
 # initialize variables for session
 init = tf.global_variables_initializer()
 sess = tf.Session()
 
 sess.run(init)
-sess.run([fixW, fixb])
 
-# run session
-print(sess.run(loss, {x: [1, 2, 3, 4], y: [0, -1, -2, -3]}))
+# train the model
+for i in range(10000):
+    sess.run(train, {x: [1, 2, 3, 4], y: [0, -1, -2, -3]})
+
+print(sess.run([W, b]))
